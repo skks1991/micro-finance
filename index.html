@@ -9,32 +9,126 @@
 <body class="bg-gray-50 p-6">
   <h1 class="text-3xl font-bold mb-4">Microfinance Manager</h1>
 
-  <label class="block mb-1">Select Member:</label>
-  <select id="member" class="mb-4 p-2 border rounded w-full md:w-1/2">
-    <option value="" disabled selected>Select...</option>
+  <div class="relative md:col-span-1 mb-4">
+  <select id="member"
+          required
+          class="peer h-12 w-full border rounded px-2 pt-4 bg-white placeholder-transparent appearance-none focus:outline-none focus:border-blue-600">
+    <option value="" disabled selected hidden></option>
     <!-- JS will populate -->
   </select>
+  <label for="member"
+         class="absolute left-2 top-2 text-gray-500 text-sm transition-all
+                peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400
+                peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">
+    Select Member
+  </label>
+</div>
 
-  <form id="tx-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <!-- month,savings,profit,withdraw,total,loan,instalment,instalment_no,instalment_due,receive_date,receiver,message,id -->
-    <input type="text" name="month" placeholder="Month (e.g. June 2025)" required pattern="^[A-Za-z]+\s+\d{4}$" class="p-2 border rounded"/>
-    <input type="number" name="savings" placeholder="Savings" required class="p-2 border rounded"/>
-    <input type="number" name="profit" step="0.01" placeholder="Profit" readonly class="p-2 border rounded"/>
-    <input type="number" name="withdraw" placeholder="Withdraw" class="p-2 border rounded"/>
-    <input type="number" name="total" placeholder="Total" readonly class="p-2 border bg-gray-200"/>
-    <input type="number" name="loan" placeholder="Loan" class="p-2 border rounded"/>
-    <input type="number" name="instalment" placeholder="Instalment" class="p-2 border rounded"/>
-    <input type="number" name="instalment_no" placeholder="Instalment No" readonly class="p-2 border bg-gray-200"/>
-    <input type="number" name="instalment_due" placeholder="Instalment Due" readonly class="p-2 border bg-gray-200"/>
-    <input type="date" name="receive_date" required class="p-2 border rounded"/>
-    <input type="text" name="receiver" placeholder="Receiver" class="p-2 border rounded"/>
-    <input type="text" name="message" placeholder="Message" class="p-2 border rounded"/>
-    <input type="hidden" name="id" />
-    <input type="hidden" name="action" value="create" />
-    <button type="submit" class="col-span-full bg-blue-600 text-white p-2 rounded">Submit</button>
-  </form>
 
-  <input type="text" id="search" placeholder="Search..." class="p-2 border rounded w-full mb-4"/>
+  <form id="tx-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+  <!-- Floating input fields -->
+  <div class="relative">
+    <input type="text" name="month" required pattern="^[A-Za-z]+\s+\d{4}$"
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-white placeholder-transparent focus:outline-none focus:border-blue-600"
+           placeholder="Month (e.g. June 2025)" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Month (e.g. June 2025)</label>
+  </div>
+
+  <div class="relative">
+    <input type="number" name="savings" required
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-white placeholder-transparent focus:outline-none focus:border-blue-600"
+           placeholder="Savings" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Savings</label>
+  </div>
+
+  <div class="relative">
+    <input type="number" name="profit" step="0.01" readonly
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-gray-100 placeholder-transparent focus:outline-none"
+           placeholder="Profit" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Profit</label>
+  </div>
+
+  <div class="relative">
+    <input type="number" name="withdraw"
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-white placeholder-transparent focus:outline-none focus:border-blue-600"
+           placeholder="Withdraw" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Withdraw</label>
+  </div>
+
+  <div class="relative">
+    <input type="number" name="total" readonly
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-gray-100 placeholder-transparent focus:outline-none"
+           placeholder="Total" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Total</label>
+  </div>
+
+  <div class="relative">
+    <input type="number" name="loan"
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-white placeholder-transparent focus:outline-none focus:border-blue-600"
+           placeholder="Loan" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Loan</label>
+  </div>
+
+  <div class="relative">
+    <input type="number" name="instalment"
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-white placeholder-transparent focus:outline-none focus:border-blue-600"
+           placeholder="Instalment" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Instalment</label>
+  </div>
+
+  <div class="relative">
+    <input type="number" name="instalment_no" readonly
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-gray-100 placeholder-transparent focus:outline-none"
+           placeholder="Instalment No" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Instalment No</label>
+  </div>
+
+  <div class="relative">
+    <input type="number" name="instalment_due" readonly
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-gray-100 placeholder-transparent focus:outline-none"
+           placeholder="Instalment Due" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Instalment Due</label>
+  </div>
+
+  <div class="relative">
+    <input type="date" name="receive_date" required
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-white placeholder-transparent focus:outline-none focus:border-blue-600"
+           placeholder="Receive Date" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Receive Date</label>
+  </div>
+
+  <div class="relative">
+    <input type="text" name="receiver"
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-white placeholder-transparent focus:outline-none focus:border-blue-600"
+           placeholder="Receiver" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Receiver</label>
+  </div>
+
+  <div class="relative">
+    <input type="text" name="message"
+           class="peer h-12 w-full border rounded px-2 pt-4 bg-white placeholder-transparent focus:outline-none focus:border-blue-600"
+           placeholder="Message" />
+    <label class="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-gray-500">Message</label>
+  </div>
+
+  <input type="hidden" name="id" />
+  <input type="hidden" name="action" value="create" />
+  <button type="submit" class="col-span-full bg-blue-600 text-white p-2 rounded">Submit</button>
+</form>
+
+
+  <div class="relative mb-4 w-full">
+  <input type="text" id="search" placeholder="Search..."
+         class="peer h-12 w-full border rounded px-2 pt-4 bg-white placeholder-transparent focus:outline-none focus:border-blue-600" />
+  <label for="search"
+         class="absolute left-2 top-2 text-gray-500 text-sm transition-all 
+                peer-placeholder-shown:top-3 peer-placeholder-shown:text-base 
+                peer-placeholder-shown:text-gray-400 peer-focus:top-2 
+                peer-focus:text-sm peer-focus:text-gray-500">
+    Search...
+  </label>
+</div>
+
 
   <div class="overflow-auto">
     <table class="table-auto w-full bg-white shadow">
@@ -48,6 +142,7 @@
       <tbody id="tx-table"></tbody>
     </table>
   </div>
+
 
   <script>
     const memberEl = document.getElementById('member');
