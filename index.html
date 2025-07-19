@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>MicroFinance Manager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-6 bg-gray-50">
+  <h1 class="text-3xl font-bold mb-6">MicroFinance Activity</h1>
+  <div>
+    <label>Select Member:
+      <select id="member" class="border p-2 rounded">
+        ${[...Array(10)].map((_,i)=>
+          `<option value="${i+1}">Member ${i+1}</option>`
+        ).join('')}
+      </select>
+    </label>
+  </div>
+  <form id="form" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+    <input required name="month" type="text" placeholder="Month e.g. July 2025" class="p-2 border rounded"/>
+    <input required name="savings" type="number" placeholder="Savings" class="p-2 border rounded"/>
+    <input name="profit" type="number" placeholder="Profit (auto)" readonly class="p-2 bg-gray-100 border rounded"/>
+    <input name="withdraw" type="number" placeholder="Withdraw" class="p-2 border rounded"/>
+    <input name="loan" type="number" placeholder="Loan" class="p-2 border rounded"/>
+    <input name="instalment" type="number" placeholder="Instalment" class="p-2 border rounded"/>
+    <input name="receive_date" type="date" class="p-2 border rounded"/>
+    <input name="receiver" type="text" placeholder="Receiver" class="p-2 border rounded"/>
+    <input name="message" type="text" placeholder="Message" value="paid" class="p-2 border rounded"/>
+    <input type="hidden" name="action" value="create"/>
+    <button class="col-span-full bg-blue-600 text-white p-2 rounded">Submit</button>
+  </form>
+
+  <div class="mt-6 overflow-auto">
+    <table class="w-full table-auto bg-white text-left text-sm">
+      <thead class="bg-gray-200"><tr>
+        .{["Month","Savings","Profit","Withdraw","Total","Loan","Instalment","Inst#","Due","Date","Receiver","Msg","Action"]
+          .map(h=>`<th class="p-2">${h}</th>`).join('')}
+      </tr></thead>
+      <tbody id="table" class="divide-y"></tbody>
+    </table>
+  </div>
+
+  <script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzTb6zXZhSRLMXHc-J8eMcfo7xH-Ze8DqBp5Pr-EvdZOISsipBeqmCXO_wEhwdjO06b/exec";
+  const memberSel = document.getElementById("member");
+  const form = document.getElementById("form");
+  const tbody = document.getElementById("table");
+  let editing = null;
+
+  async function load() {
+    const m = memberSel.value;
+    const res = await fetch(\`\${scriptURL}?action=read_members&member=\${m}\`);
+    const data = await res.json();
+    tbody.innerHTML = "";
+    data.forEach(r=>{
+      const tr = document.createElement("tr");
+      Object.values(r).forEach(val=>{
+        const td = document.createElement("td");
+        td.textContent = val;
+        td.className = "p-2";
+        tr.append(td);
+      });
+      const td = document.createElement("td"); td.className="p-2";
+      const del = document.createElement("button");
+      del.textContent="Del"; del.className="text-red-600 mr-2";
+      del.onclick = ()=>doAction("delete", r.id);
+      const ed = document.createElement("button");
+      ed.textContent="Edit"; ed.className="text-blue-600";
+      ed.onclick = ()=>startEdit(r);
+      td.append(ed, del);
+      tr.append(td);
+      tbody.append(tr);
+    });
+  }
+
+  async function doAction(act, id=null) {
+    const params = new URLSearchParams(new FormData(form));
+    params.set("action", act);
+    params.set("member", memberSel.value);
+    if (id) params.set("id", id);
+    const res = await fetch(scriptURL, {method:"POST", body: params});
+    const {success,message} = await res.json();
+    if (!success) alert(message);
+    editing = null; form.action.value="create"; form.reset(); load();
+  }
+
+  form.onsubmit = e=>{
+    e.preventDefault();
+    doAction(editing?"update":"create");
+  };
+
+  function startEdit(r) {
+    editing = r.id;
+    form.action.value="update";
+    Object.entries(r).forEach(([k,v])=>{
+      const f = form.elements[k];
+      if (f) f.value = v;
+    });
+  }
+
+  memberSel.onchange = ()=>{ editing=null; form.reset(); load(); };
+
+  load();
+  </script>
+</body>
+</html>
